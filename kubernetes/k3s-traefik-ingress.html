@@ -1,0 +1,301 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>k3s, traefik and ingress &mdash; cstevens-docs 2020.06.24.06.07 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="../notes/index.html" />
+    <link rel="prev" title="Install Kubernetes on Arch in Vagrant" href="kube-arch-vagrant-install.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> cstevens-docs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2020.06.24.06.07
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../firstpage.html">First Page!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arch/index.html">Arch Linux</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Kubernetes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="kube-arch-install.html">Install Kubernetes on Arch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kube-arch-vagrant-install.html">Install Kubernetes on Arch in Vagrant</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">k3s, traefik and ingress</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Notes on stuff</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notes/pacman.html">pacman</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/tmux.html">tmux QOL settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/kube-pods.html">Kubernetes pods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/kube-deployments.html">Kubernetes deployments</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cstevens-docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Kubernetes</a> &raquo;</li>
+        
+      <li>k3s, traefik and ingress</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/splooge/splooge.github.io/blob/master/source/kubernetes/k3s-traefik-ingress.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="k3s-traefik-and-ingress">
+<h1>k3s, traefik and ingress<a class="headerlink" href="#k3s-traefik-and-ingress" title="Permalink to this headline">¶</a></h1>
+<p>Special thanks to <a class="reference external" href="https://www.youtube.com/user/wenkatn">just me and open source</a>, specifically <a class="reference external" href="https://www.youtube.com/watch?v=12taKl5iCpA">this video</a></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># install k3s
+curl -sfL https://get.k3s.io | sh -
+
+# traefik comes as a deployment
+kubectl -n kube-system get deploy
+
+# let&#39;s enable the traefik dashboard
+# notice traefik has a configmap named traefik
+kubectl -n kube-system describe deploy traefik
+
+# edit the configmap
+kubectl -n kube-system edit cm traefik
+# we need to add under traefik.toml:
+[api]
+  dashboard = true
+
+# you can reload the pod to re-read the config by scaling the deployment
+# or you can simply delete the pod and let the replicaset start a new one
+kubectl -n kube-system scale deploy traefik --replicas 0
+kubectl -n kube-system scale deploy traefik --replicas 1
+# or
+kubectl -n kube-system delete pod traefikyyyyyyyyy-zzzzz
+
+# the traefik dashboard runs on port 8080 but only inside the cluster
+# so you&#39;ll have to use port-forward to access it (unless you want to expose
+# it outside of the cluster, we can talk about that later)
+# once you complete the below command, open up http://localhost:8080 in a browser
+kubectl -n kube-system port-forward deployment/traefik 8080
+
+# let&#39;s deploy nginx, expose it as a service, then create an ingress
+kubectl create deploy nginx --image nginx
+
+# verify you have an nginx deployment
+kubectl get deploy -o wide
+
+# expose the deployment
+kubectl expose deploy nginx --port 80
+
+# verify you have an nginx service
+kubectl get service
+
+# create an ingress resource
+# from the example here: https://github.com/rancher/k3d/blob/master/docs/usage/guides/exposing_services.md
+# create a nginx-ingress.yaml:
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nginx
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: &quot;false&quot;
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: nginx
+          servicePort: 80
+
+kubectl create -f nginx-ingress.yaml
+
+kubectl get ingress
+kubectl describe ingress nginx
+
+# backend IP should match nginx pod
+kubectl get pods -o wide
+
+# browse to any cluster IP http://192.168.1.211
+# should bring up nginx welcome page
+# now browse back to the dashboard (make sure you&#39;re still port-forwarded)
+# http://localhost:8080
+# and you will see traefik populate a front-end and a back-end
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../notes/index.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="kube-arch-vagrant-install.html" class="btn btn-neutral float-left" title="Install Kubernetes on Arch in Vagrant" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Chris Stevens
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

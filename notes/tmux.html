@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tmux QOL settings &mdash; cstevens-docs 2020.06.24.06.07 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kubernetes pods" href="kube-pods.html" />
+    <link rel="prev" title="pacman" href="pacman.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> cstevens-docs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2020.06.24.06.07
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../firstpage.html">First Page!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arch/index.html">Arch Linux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kubernetes/index.html">Kubernetes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Notes on stuff</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="pacman.html">pacman</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">tmux QOL settings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tmux-conf">~/.tmux.conf</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="kube-pods.html">Kubernetes pods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kube-deployments.html">Kubernetes deployments</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cstevens-docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">&lt;no title&gt;</a> &raquo;</li>
+        
+      <li>tmux QOL settings</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/splooge/splooge.github.io/blob/master/source/notes/tmux.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tmux-qol-settings">
+<h1>tmux QOL settings<a class="headerlink" href="#tmux-qol-settings" title="Permalink to this headline">¶</a></h1>
+<p>a.k.a. tmux config for screen users</p>
+<div class="section" id="tmux-conf">
+<h2>~/.tmux.conf<a class="headerlink" href="#tmux-conf" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># tmux config for screen users
+
+# remap prefix from &#39;C-b&#39; to &#39;C-a&#39;
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a send-prefix
+
+# split panes using | and -
+bind | split-window -h
+bind - split-window -v
+unbind &#39;&quot;&#39;
+unbind %
+
+# switch panes using Alt-arrow without prefix
+bind -n M-Left select-pane -L
+bind -n M-Right select-pane -R
+bind -n M-Up select-pane -U
+bind -n M-Down select-pane -D
+
+# enable mouse mode (tmux 2.1 and above)
+# this allows scrolling in panes with the mousewheel,
+# select active pane with mouse, adjust pane size with mouse
+set -g mouse on
+
+# bring cursor to beginning of line like in screen: C-a, a
+bind a send-prefix
+
+# bind &#39;&quot;&#39; to choose-window, instead of &#39;w&#39;, similar to screen
+unbind w
+bind &#39;&quot;&#39; choose-window
+
+# bind &#39;A&#39; to rename-window, similar to screen
+bind A command-prompt -I &quot;#W&quot; &quot;rename-window &#39;%%&#39;&quot;
+
+# bind C-a, C-a to previous window
+bind C-a last-window
+
+# bind &#39;k&#39; to kill-window (instead of &amp;)
+unbind &amp;
+bind k confirm-before -p &quot;kill window #W? (y/n)&quot; kill-window
+
+# bind &#39;s&#39; to synchronize typing in panes
+# rebind &#39;s&#39; choose-tree to &#39;S&#39;
+bind S choose-tree
+bind s set-window-option synchronize-panes
+
+# rename window to reflect current program
+# will not rename windows that have been manually named
+setw -g automatic-rename on
+
+# don&#39;t renumber windows when a window is closed
+set -g renumber-windows off
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="kube-pods.html" class="btn btn-neutral float-right" title="Kubernetes pods" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pacman.html" class="btn btn-neutral float-left" title="pacman" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Chris Stevens
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

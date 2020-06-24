@@ -1,0 +1,404 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Arch Linux install &mdash; cstevens-docs 2020.06.24.06.07 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Arch Linux post-install options" href="arch-post-install.html" />
+    <link rel="prev" title="Arch Linux" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> cstevens-docs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2020.06.24.06.07
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../firstpage.html">First Page!</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Arch Linux</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Arch Linux install</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#setup-disk-partitions">Setup disk partitions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#format-partitions">Format partitions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mount-partitions">Mount partitions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-the-base-system-and-enter-chroot">Install the base system and enter chroot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-local-timezone-and-create-etc-adjtime">Set local timezone and create /etc/adjtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-and-generate-locale">Set and generate locale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-the-host-name">Set the host name</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adjust-the-hosts-file">Adjust the hosts file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enable-ntp-daemon">Enable NTP daemon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-the-root-password">Set the root password</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-files-for-and-install-systemd-boot">Create files for and install systemd-boot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-networking">Configure networking</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dhcp">DHCP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#static">Static</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#exit-chroot-and-reboot">Exit chroot and reboot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="arch-post-install.html">Arch Linux post-install options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../kubernetes/index.html">Kubernetes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Notes on stuff</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notes/pacman.html">pacman</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/tmux.html">tmux QOL settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/kube-pods.html">Kubernetes pods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/kube-deployments.html">Kubernetes deployments</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cstevens-docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Arch Linux</a> &raquo;</li>
+        
+      <li>Arch Linux install</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/splooge/splooge.github.io/blob/master/source/arch/arch-install.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="arch-linux-install">
+<h1>Arch Linux install<a class="headerlink" href="#arch-linux-install" title="Permalink to this headline">¶</a></h1>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Please refer to the <a class="reference external" href="https://wiki.archlinux.org">Arch Wiki</a> for the official guide on how to install Arch Linux.</p>
+</div>
+<div class="section" id="setup-disk-partitions">
+<h2>Setup disk partitions<a class="headerlink" href="#setup-disk-partitions" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># parted /dev/sda
+(parted) mklabel gpt
+(parted) mkpart primary fat32 1MiB 512MiB
+(parted) set 1 esp on
+(parted) mkpart primary linux-swap 512MiB 2560MiB
+(parted) mkpart primary ext4 2560MiB 100%
+(parted) quit
+</pre></div>
+</div>
+</div>
+<div class="section" id="format-partitions">
+<h2>Format partitions<a class="headerlink" href="#format-partitions" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># mkfs.fat -F32 /dev/sda1
+# mkswap /dev/sda2
+# mkfs.ext4 /dev/sda3
+</pre></div>
+</div>
+</div>
+<div class="section" id="mount-partitions">
+<h2>Mount partitions<a class="headerlink" href="#mount-partitions" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># mount /dev/sda3 /mnt
+# mkdir /mnt/boot
+# mount /dev/sda1 /mnt/boot
+# swapon /dev/sda2
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-the-base-system-and-enter-chroot">
+<h2>Install the base system and enter chroot<a class="headerlink" href="#install-the-base-system-and-enter-chroot" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># pacstrap /mnt base linux vim
+# genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
+# arch-chroot /mnt
+</pre></div>
+</div>
+</div>
+<div class="section" id="set-local-timezone-and-create-etc-adjtime">
+<h2>Set local timezone and create /etc/adjtime<a class="headerlink" href="#set-local-timezone-and-create-etc-adjtime" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
+# hwclock --systohc
+</pre></div>
+</div>
+</div>
+<div class="section" id="set-and-generate-locale">
+<h2>Set and generate locale<a class="headerlink" href="#set-and-generate-locale" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># echo &quot;en_US.UTF-8 UTF-8&quot; &gt; /etc/locale.gen
+# locale-gen
+# echo &quot;LANG=en_US.UTF-8&quot; &gt; /etc/locale.conf
+</pre></div>
+</div>
+</div>
+<div class="section" id="set-the-host-name">
+<h2>Set the host name<a class="headerlink" href="#set-the-host-name" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># hostnamectl set-hostname &lt;hostname&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="adjust-the-hosts-file">
+<h2>Adjust the hosts file<a class="headerlink" href="#adjust-the-hosts-file" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">/etc/hosts</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>127.0.0.1    localhost.localdomain   localhost
+::1          localhost6.localdomain   localhost6
+192.168.1.250 $myhostname.$mydomain   $myhostname
+2001:470:8050:1::250 $myhostname.$mydomain  $myhostname
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="enable-ntp-daemon">
+<h2>Enable NTP daemon<a class="headerlink" href="#enable-ntp-daemon" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># timedatectl set-ntp true
+</pre></div>
+</div>
+</div>
+<div class="section" id="set-the-root-password">
+<h2>Set the root password<a class="headerlink" href="#set-the-root-password" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># passwd
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-files-for-and-install-systemd-boot">
+<h2>Create files for and install systemd-boot<a class="headerlink" href="#create-files-for-and-install-systemd-boot" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># mkdir -p /boot/loader/entries
+</pre></div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">/boot/loader/loader.conf</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>default arch
+console-mode max
+timeout 5
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">/boot/loader/entries/arch.conf</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>title Arch Linux
+linux /vmlinuz-linux
+initrd /initramfs-linux.img
+options root=/dev/sda3 net.ifnames=0
+</pre></div>
+</div>
+</div>
+<p>Install systemd-boot:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># bootctl --path=/boot install
+</pre></div>
+</div>
+</div>
+<div class="section" id="configure-networking">
+<h2>Configure networking<a class="headerlink" href="#configure-networking" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dhcp">
+<h3>DHCP<a class="headerlink" href="#dhcp" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">/etc/systemd/network/eth0.network</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[Match]
+Name=eth0
+
+[Network]
+DHCP=yes
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="static">
+<h3>Static<a class="headerlink" href="#static" title="Permalink to this headline">¶</a></h3>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">/etc/systemd/network/eth0.network</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[Match]
+Name=eth0
+
+[Network]
+Address=192.168.1.250/24
+Gateway=192.168.1.1
+DNS=192.168.1.53
+
+Address=2001:470:8050:1::250/64
+Gateway=2001:470:8050:1::1
+DNS=2001:470:8050:1::53
+</pre></div>
+</div>
+</div>
+<p>Enable networking on boot</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># systemctl enable systemd-networkd
+# systemctl enable systemd-resolved
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="exit-chroot-and-reboot">
+<h2>Exit chroot and reboot<a class="headerlink" href="#exit-chroot-and-reboot" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># exit
+# reboot
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="arch-post-install.html" class="btn btn-neutral float-right" title="Arch Linux post-install options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Arch Linux" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Chris Stevens
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,493 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Install Kubernetes on Arch in Vagrant &mdash; cstevens-docs 2020.06.24.06.07 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="k3s, traefik and ingress" href="k3s-traefik-ingress.html" />
+    <link rel="prev" title="Install Kubernetes on Arch" href="kube-arch-install.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> cstevens-docs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2020.06.24.06.07
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../firstpage.html">First Page!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arch/index.html">Arch Linux</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Kubernetes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="kube-arch-install.html">Install Kubernetes on Arch</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Install Kubernetes on Arch in Vagrant</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-homebrew-package-manager">Install homebrew package manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-kubectl-vagrant-virtualbox">Install kubectl, vagrant, virtualbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-the-following-files">Create the following files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#then-run-vagrant-up">Then run vagrant up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#copy-the-config-from-the-master-locally">Copy the config from the master locally</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-cluster-should-now-be-accessible">The cluster should now be accessible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#to-tear-down-the-cluster">To tear down the cluster</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="k3s-traefik-ingress.html">k3s, traefik and ingress</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Notes on stuff</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notes/pacman.html">pacman</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/tmux.html">tmux QOL settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/kube-pods.html">Kubernetes pods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/kube-deployments.html">Kubernetes deployments</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cstevens-docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Kubernetes</a> &raquo;</li>
+        
+      <li>Install Kubernetes on Arch in Vagrant</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/splooge/splooge.github.io/blob/master/source/kubernetes/kube-arch-vagrant-install.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="install-kubernetes-on-arch-in-vagrant">
+<h1>Install Kubernetes on Arch in Vagrant<a class="headerlink" href="#install-kubernetes-on-arch-in-vagrant" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="install-homebrew-package-manager">
+<h2>Install homebrew package manager<a class="headerlink" href="#install-homebrew-package-manager" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ /bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)&quot;
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-kubectl-vagrant-virtualbox">
+<h2>Install kubectl, vagrant, virtualbox<a class="headerlink" href="#install-kubectl-vagrant-virtualbox" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ brew install kubernetes-cli
+$ brew cask install vagrant
+$ brew cask install virtualbox
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-the-following-files">
+<h2>Create the following files<a class="headerlink" href="#create-the-following-files" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Vagrantfile</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span> # -*- mode: ruby -*-
+ # vi: set ft=ruby :
+
+ Vagrant.configure(2) do |config|
+
+   config.vm.synced_folder &#39;/host/path&#39;, &#39;/guest/path&#39;, disabled: true
+
+   config.vm.provision &quot;shell&quot;, path: &quot;bootstrap.sh&quot;
+
+   # Kubernetes Master Server
+   config.vm.define &quot;k8smaster001&quot; do |k8smaster001|
+     k8smaster001.vm.box = &quot;archlinux/archlinux&quot;
+     k8smaster001.vm.hostname = &quot;k8smaster001.lab.pwned.com&quot;
+     k8smaster001.vm.network &quot;private_network&quot;, ip: &quot;192.168.2.100&quot;
+     k8smaster001.vm.provider &quot;virtualbox&quot; do |v|
+       v.name = &quot;k8smaster001&quot;
+       v.memory = 2048
+       v.cpus = 2
+       # Prevent VirtualBox from interfering with host audio stack
+       v.customize [&quot;modifyvm&quot;, :id, &quot;--audio&quot;, &quot;none&quot;]
+     end
+     k8smaster001.vm.provision &quot;shell&quot;, path: &quot;bootstrap_kmaster.sh&quot;
+   end
+
+   NodeCount = 2
+
+   # Kubernetes Worker Nodes
+   (1..NodeCount).each do |i|
+     config.vm.define &quot;k8sworker00#{i}&quot; do |workernode|
+       workernode.vm.box = &quot;archlinux/archlinux&quot;
+       workernode.vm.hostname = &quot;k8sworker00#{i}.lab.pwned.com&quot;
+       workernode.vm.network &quot;private_network&quot;, ip: &quot;192.168.2.10#{i}&quot;
+       workernode.vm.provider &quot;virtualbox&quot; do |v|
+         v.name = &quot;k8sworker00#{i}&quot;
+         v.memory = 1024
+         v.cpus = 1
+         # Prevent VirtualBox from interfering with host audio stack
+         v.customize [&quot;modifyvm&quot;, :id, &quot;--audio&quot;, &quot;none&quot;]
+       end
+       workernode.vm.provision &quot;shell&quot;, path: &quot;bootstrap_kworker.sh&quot;
+     end
+   end
+
+ end
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">bootstrap.sh</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+
+# update hosts file
+echo &quot;[TASK 1] update /etc/hosts file&quot;
+cat &gt;&gt;/etc/hosts&lt;&lt;EOF
+192.168.2.100 k8smaster001.lab.pwned.com k8smaster001
+192.168.2.101 k8sworker001.lab.pwned.com k8sworker001
+192.168.2.102 k8sworker002.lab.pwned.com k8sworker002
+EOF
+
+echo &quot;[TASK 2] install docker and tools&quot;
+pacman --noconfirm -Sy
+pacman --noconfirm -S conntrack-tools docker ebtables ethtool socat sshpass
+
+echo &quot;[TASK 3] load and configure br_netfilter module&quot;
+modprobe br_netfilter
+echo &quot;br_netfilter&quot; &gt; /etc/modules-load.d/br_netfilter.conf
+
+echo &quot;[TASK 4] add sysctl settings&quot;
+cat &gt;&gt;/etc/sysctl.d/kubernetes.conf&lt;&lt;EOF
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sysctl --system &gt;/dev/null 2&gt;&amp;1
+
+echo &quot;[TASK 5] fix docker.service unit&quot;
+rm /usr/lib/systemd/system/docker.service
+cat &gt;&gt;/usr/lib/systemd/system/docker.service&lt;&lt;EOF
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network-online.target docker.socket firewalld.service
+Wants=network-online.target
+Requires=docker.socket
+
+[Service]
+Type=notify
+# the default is not to use systemd for cgroups because the delegate issues still
+# exists and systemd currently does not support the cgroup feature set required
+# for containers run by docker
+ExecStart=/usr/bin/dockerd --exec-opt native.cgroupdriver=systemd --iptables=false --ip-masq=false -H fd://
+ExecReload=/bin/kill -s HUP $MAINPID
+LimitNOFILE=1048576
+# Having non-zero Limit*s causes performance problems due to accounting overhead
+# in the kernel. We recommend using cgroups to do container-local accounting.
+LimitNPROC=infinity
+LimitCORE=infinity
+# Uncomment TasksMax if your systemd version supports it.
+# Only systemd 226 and above support this version.
+#TasksMax=infinity
+TimeoutStartSec=0
+# set delegate yes so that systemd does not reset the cgroups of docker containers
+Delegate=yes
+# kill only the docker process, not all processes in the cgroup
+KillMode=process
+# restart the docker process if it exits prematurely
+Restart=on-failure
+StartLimitBurst=3
+StartLimitInterval=60s
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+echo &quot;[TASK 6] enable docker service&quot;
+systemctl enable docker &gt;/dev/null 2&gt;&amp;1
+systemctl start docker
+
+echo &quot;[TASK 7] disable and turn off swap&quot;
+sed -i &#39;/swap/d&#39; /etc/fstab
+swapoff -a
+
+echo &quot;[TASK 8] download latest kubernetes binaries&quot;
+RELEASE=&quot;$(curl -sSL https://dl.k8s.io/release/stable.txt)&quot;
+ARCH=&quot;amd64&quot;
+cd /usr/local/bin
+curl -sL --remote-name-all https://storage.googleapis.com/kubernetes-release/release/${RELEASE}/bin/linux/${ARCH}/{kubeadm,kubelet,kubectl}
+chmod +x {kubeadm,kubelet,kubectl} &amp;&amp; cd
+mkdir -p /etc/systemd/system/kubelet.service.d
+
+echo &quot;[TASK 9] create unit files for kubelet&quot;
+cat &gt;&gt;/etc/systemd/system/kubelet.service&lt;&lt;EOF
+[Unit]
+Description=kubelet: The Kubernetes Node Agent
+Documentation=http://kubernetes.io/docs/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/kubelet
+Restart=always
+StartLimitInterval=0
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+cat &gt;&gt;/etc/systemd/system/kubelet.service.d/10-kubeadm.conf&lt;&lt;EOF
+# Note: This dropin only works with kubeadm and kubelet v1.11+
+[Service]
+Environment=&quot;KUBELET_KUBECONFIG_ARGS=--bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf&quot;
+Environment=&quot;KUBELET_CONFIG_ARGS=--config=/var/lib/kubelet/config.yaml&quot;
+# This is a file that &quot;kubeadm init&quot; and &quot;kubeadm join&quot; generates at runtime, populating the KUBELET_KUBEADM_ARGS variable dynamically
+EnvironmentFile=-/var/lib/kubelet/kubeadm-flags.env
+# This is a file that the user can use for overrides of the kubelet args as a last resort. Preferably, the user should use
+# the .NodeRegistration.KubeletExtraArgs object in the configuration files instead. KUBELET_EXTRA_ARGS should be sourced from this file.
+EnvironmentFile=-/etc/default/kubelet
+ExecStart=
+ExecStart=/usr/local/bin/kubelet \$KUBELET_KUBECONFIG_ARGS \$KUBELET_CONFIG_ARGS \$KUBELET_KUBEADM_ARGS \$KUBELET_EXTRA_ARGS
+EOF
+
+echo &quot;[TASK 10] enable and start kubelet service&quot;
+systemctl enable kubelet &gt;/dev/null 2&gt;&amp;1
+systemctl start kubelet
+
+echo &quot;[TASK 11] enable root ssh password auth&quot;
+sed -i &#39;s/#PasswordAuthentication no/PasswordAuthentication yes/&#39; /etc/ssh/sshd_config
+sed -i &#39;s/#PermitRootLogin prohibit-password/PermitRootLogin yes/&#39; /etc/ssh/sshd_config
+systemctl reload sshd
+
+echo &quot;[TASK 12] set root password&quot;
+echo -e &quot;P@ssw0rd\nP@ssw0rd&quot; | passwd root &gt;/dev/null 2&gt;&amp;1
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">bootstrap_kmaster.sh</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+
+# Initialize Kubernetes
+echo &quot;[TASK 13] initialize kubernetes cluster&quot;
+kubeadm init --apiserver-advertise-address=192.168.2.100 --pod-network-cidr=192.168.0.0/16 # &gt;&gt; /root/kubeinit.log 2&gt;/dev/null
+
+# copy kubeadm config
+echo &quot;[TASK 14] copy kubeadm config to vagrant user .kube directory&quot;
+mkdir /home/vagrant/.kube
+cp /etc/kubernetes/admin.conf /home/vagrant/.kube/config
+chown -R vagrant:vagrant /home/vagrant/.kube
+
+# deploy calico network
+echo &quot;[TASK 15] deploy calico network&quot;
+su - vagrant -c &quot;kubectl create -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml&quot;
+
+# generate cluster join command
+echo &quot;[TASK 16] Generate and save cluster join command to /joincluster.sh&quot;
+kubeadm token create --print-join-command &gt; /joincluster.sh
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">bootstrap_kworker.sh</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+
+# join worker nodes to the cluster
+echo &quot;[TASK 13] copy over cluster join script&quot;
+sshpass -p &quot;P@ssw0rd&quot; scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no k8smaster001.lab.pwned.com:/joincluster.sh /joincluster.sh 2&gt;/dev/null
+echo &quot;[TASK 14] join this node to the cluster&quot;
+bash /joincluster.sh &gt;/dev/null 2&gt;&amp;1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="then-run-vagrant-up">
+<h2>Then run vagrant up<a class="headerlink" href="#then-run-vagrant-up" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ vagrant up
+</pre></div>
+</div>
+</div>
+<div class="section" id="copy-the-config-from-the-master-locally">
+<h2>Copy the config from the master locally<a class="headerlink" href="#copy-the-config-from-the-master-locally" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ mkdir ~/.kube
+$ scp root@k8smaster001:/etc/kubernetes/admin.conf ~/.kube/config
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-cluster-should-now-be-accessible">
+<h2>The cluster should now be accessible<a class="headerlink" href="#the-cluster-should-now-be-accessible" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ kubectl get nodes
+NAME         STATUS  ROLES   AGE     VERSION
+k8smaster001 Ready   master  5m39s   v1.18.4
+k8sworker001 Ready   &lt;none&gt;  3m35s   v1.18.4
+k8sworker002 Ready   &lt;none&gt;  104s    v1.18.4
+</pre></div>
+</div>
+</div>
+<div class="section" id="to-tear-down-the-cluster">
+<h2>To tear down the cluster<a class="headerlink" href="#to-tear-down-the-cluster" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ vagrant destroy
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="k3s-traefik-ingress.html" class="btn btn-neutral float-right" title="k3s, traefik and ingress" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="kube-arch-install.html" class="btn btn-neutral float-left" title="Install Kubernetes on Arch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Chris Stevens
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

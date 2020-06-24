@@ -1,0 +1,425 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Install Kubernetes on Arch &mdash; cstevens-docs 2020.06.24.06.07 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Install Kubernetes on Arch in Vagrant" href="kube-arch-vagrant-install.html" />
+    <link rel="prev" title="Kubernetes" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> cstevens-docs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2020.06.24.06.07
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../firstpage.html">First Page!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arch/index.html">Arch Linux</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Kubernetes</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Install Kubernetes on Arch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-some-needed-utilities">Install some needed utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#disable-swap-space">Disable swap space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-and-configure-the-br-netfilter-module">Load and configure the br_netfilter module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update-the-execstart-line-in-the-docker-unit-file">Update the <cite>ExecStart</cite> line in the docker unit file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#start-and-enable-docker">Start and enable docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-the-latest-kubernetes-binaries">Download the latest kubernetes binaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-the-latest-container-network-interface">Download the latest container network interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-the-latest-container-runtime-interface">Download the latest container runtime interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-systemd-unit-files-for-kubelet">Create systemd unit files for kubelet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enable-and-start-kubelet">Enable and start kubelet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initialize-the-cluster">Initialize the cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setup-kubectl-config">Setup kubectl config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deploy-a-pod-network-to-the-cluster">Deploy a pod network to the cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-kubectl-completion-and-alias">Add kubectl completion and alias</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kubectl-examples">kubectl examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="kube-arch-vagrant-install.html">Install Kubernetes on Arch in Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="k3s-traefik-ingress.html">k3s, traefik and ingress</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Notes on stuff</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notes/pacman.html">pacman</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/tmux.html">tmux QOL settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/kube-pods.html">Kubernetes pods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notes/kube-deployments.html">Kubernetes deployments</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cstevens-docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Kubernetes</a> &raquo;</li>
+        
+      <li>Install Kubernetes on Arch</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/splooge/splooge.github.io/blob/master/source/kubernetes/kube-arch-install.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="install-kubernetes-on-arch">
+<h1>Install Kubernetes on Arch<a class="headerlink" href="#install-kubernetes-on-arch" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is not a step-by-step installation guide for beginners.  This article assumes you have some previous experience with Linux and Kubernetes.</p>
+</div>
+<div class="section" id="install-some-needed-utilities">
+<h2>Install some needed utilities<a class="headerlink" href="#install-some-needed-utilities" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># pacman -S conntrack-tools docker ebtables ethtool socat
+</pre></div>
+</div>
+</div>
+<div class="section" id="disable-swap-space">
+<h2>Disable swap space<a class="headerlink" href="#disable-swap-space" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># swapoff -a
+# sed -e &#39;/swap/ s/^#*/#/&#39; -i /etc/fstab
+</pre></div>
+</div>
+</div>
+<div class="section" id="load-and-configure-the-br-netfilter-module">
+<h2>Load and configure the br_netfilter module<a class="headerlink" href="#load-and-configure-the-br-netfilter-module" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># modprobe br_netfilter
+# sysctl net.bridge.bridge-nf-call-iptables=1
+# echo &quot;br_netfilter&quot; &gt; /etc/modules-load.d/br_netfilter.conf
+# echo &quot;net.bridge.bridge-nf-call-iptables=1&quot; &gt; /etc/sysctl.d/br_netfilter.conf
+</pre></div>
+</div>
+</div>
+<div class="section" id="update-the-execstart-line-in-the-docker-unit-file">
+<h2>Update the <cite>ExecStart</cite> line in the docker unit file<a class="headerlink" href="#update-the-execstart-line-in-the-docker-unit-file" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">/usr/lib/systemd/system/docker.service</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ExecStart=/usr/bin/dockerd --exec-opt native.cgroupdriver=systemd --iptables=false --ip-masq=false -H fd://
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="start-and-enable-docker">
+<h2>Start and enable docker<a class="headerlink" href="#start-and-enable-docker" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># systemctl daemon-reload
+# systemctl enable docker
+# systemctl start docker
+</pre></div>
+</div>
+</div>
+<div class="section" id="download-the-latest-kubernetes-binaries">
+<h2>Download the latest kubernetes binaries<a class="headerlink" href="#download-the-latest-kubernetes-binaries" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># RELEASE=&quot;$(curl -sSL https://dl.k8s.io/release/stable.txt)&quot;
+# ARCH=&quot;amd64&quot;
+# cd /usr/local/bin
+# curl -L --remote-name-all https://storage.googleapis.com/kubernetes-release/release/${RELEASE}/bin/linux/${ARCH}/{kubeadm,kubelet,kubectl}
+# chmod +x {kubeadm,kubelet,kubectl} &amp;&amp; cd
+# mkdir -p /etc/systemd/system/kubelet.service.d
+</pre></div>
+</div>
+</div>
+<div class="section" id="download-the-latest-container-network-interface">
+<h2>Download the latest container network interface<a class="headerlink" href="#download-the-latest-container-network-interface" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CNI_VERSION=&quot;v0.8.6&quot;
+mkdir -p /opt/cni/bin
+curl -L &quot;https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-amd64-${CNI_VERSION}.tgz&quot; | tar -C /opt/cni/bin -xz
+</pre></div>
+</div>
+</div>
+<div class="section" id="download-the-latest-container-runtime-interface">
+<h2>Download the latest container runtime interface<a class="headerlink" href="#download-the-latest-container-runtime-interface" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CRICTL_VERSION=&quot;v1.18.0&quot;
+mkdir -p /opt/cri
+curl -L &quot;https://github.com/kubernetes-incubator/cri-tools/releases/download/${CRICTL_VERSION}/crictl-${CRICTL_VERSION}-linux-amd64.tar.gz&quot; | tar -C /opt/cri -xz
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-systemd-unit-files-for-kubelet">
+<h2>Create systemd unit files for kubelet<a class="headerlink" href="#create-systemd-unit-files-for-kubelet" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">/etc/systemd/system/kubelet.service</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[Unit]
+Description=kubelet: The Kubernetes Node Agent
+Documentation=http://kubernetes.io/docs/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/kubelet
+Restart=always
+StartLimitInterval=0
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">/etc/systemd/system/kubelet.service.d/10-kubeadm.conf</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># Note: This dropin only works with kubeadm and kubelet v1.11+
+[Service]
+Environment=&quot;KUBELET_KUBECONFIG_ARGS=--bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf&quot;
+Environment=&quot;KUBELET_CONFIG_ARGS=--config=/var/lib/kubelet/config.yaml&quot;
+# This is a file that &quot;kubeadm init&quot; and &quot;kubeadm join&quot; generates at runtime, populating the KUBELET_KUBEADM_ARGS variable dynamically
+EnvironmentFile=-/var/lib/kubelet/kubeadm-flags.env
+# This is a file that the user can use for overrides of the kubelet args as a last resort. Preferably, the user should use
+# the .NodeRegistration.KubeletExtraArgs object in the configuration files instead. KUBELET_EXTRA_ARGS should be sourced from this file.
+EnvironmentFile=-/etc/default/kubelet
+ExecStart=
+ExecStart=/usr/local/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_KUBEADM_ARGS $KUBELET_EXTRA_ARGS
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="enable-and-start-kubelet">
+<h2>Enable and start kubelet<a class="headerlink" href="#enable-and-start-kubelet" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># systemctl enable kubelet
+# systemctl start kubelet
+</pre></div>
+</div>
+</div>
+<div class="section" id="initialize-the-cluster">
+<h2>Initialize the cluster<a class="headerlink" href="#initialize-the-cluster" title="Permalink to this headline">¶</a></h2>
+<p>Master node:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># kubeadm init --pod-network-cidr=10.244.0.0/16
+</pre></div>
+</div>
+<p>Worker node:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># kubeadm join 192.168.1.241:6443 --token &lt;token&gt; --discovery-token-ca-cert-hash sha256: &lt;hash&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="setup-kubectl-config">
+<h2>Setup kubectl config<a class="headerlink" href="#setup-kubectl-config" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>$ mkdir -p $HOME/.kube
+$ cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+$ chown $(id -u):$(id -g) $HOME/.kube/config
+</pre></div>
+</div>
+</div>
+<div class="section" id="deploy-a-pod-network-to-the-cluster">
+<h2>Deploy a pod network to the cluster<a class="headerlink" href="#deploy-a-pod-network-to-the-cluster" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Run &quot;kubectl apply -f [podnetwork].yaml&quot; with one of the options listed at:
+https://kubernetes.io/docs/concepts/cluster-administration/addons/
+eg:
+kubectl apply -f &quot;https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d &#39;\n&#39;)&quot;
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-kubectl-completion-and-alias">
+<h2>Add kubectl completion and alias<a class="headerlink" href="#add-kubectl-completion-and-alias" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cat &gt;&gt;~/.zshrc&lt;&lt;EOF
+source &lt;(kubectl completion zsh)
+alias k=kubectl
+complete -F __start_kubectl k
+EOF
+</pre></div>
+</div>
+</div>
+<div class="section" id="kubectl-examples">
+<h2>kubectl examples<a class="headerlink" href="#kubectl-examples" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 75%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Command</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>kubectl get nodes</p></td>
+<td><p>List all nodes in the cluster</p></td>
+</tr>
+<tr class="row-odd"><td><p>kubectl get all -A</p></td>
+<td><p>Show all resources from all namespaces</p></td>
+</tr>
+<tr class="row-even"><td><p>kubectl describe nodes</p></td>
+<td><p>Show information of all nodes in the cluster</p></td>
+</tr>
+<tr class="row-odd"><td><p>kubectl top node</p></td>
+<td><p>Get node resource usage</p></td>
+</tr>
+<tr class="row-even"><td><p>kubectl top pod</p></td>
+<td><p>Get pod resource usage</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="kube-arch-vagrant-install.html" class="btn btn-neutral float-right" title="Install Kubernetes on Arch in Vagrant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Kubernetes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Chris Stevens
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
