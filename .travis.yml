@@ -1,0 +1,9 @@
+services:
+  - docker
+
+script:
+  - docker build . -t splooge/docs-cstevens-io
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push splooge/docs-cstevens-io
