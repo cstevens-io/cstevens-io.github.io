@@ -77,3 +77,19 @@ Special thanks to `just me and open source <https://www.youtube.com/user/wenkatn
    # now browse back to the dashboard (make sure you're still port-forwarded)
    # http://localhost:8080
    # and you will see traefik populate a front-end and a back-end
+
+   # let's add basic auth to the nginx site
+   htpasswd -c ./authfile <username>
+   kubectl create secret generic nginx-auth --from-file authfile
+   kubectl get secret nginx-auth -o yaml
+
+   # then in the nginx-ingress.yaml file, add annotations under metadata:
+   metadata:
+     annotations:
+       kubernetes.io/ingress.class: traefik
+       ingress.kubernetes.io/auth-type: "basic"
+       ingress.kubernetes.io/auth-realm: "nginx-auth"
+
+   # then delete and re-create the nginx ingress resource
+   kubectl delete -f nginx-ingress.yaml
+   kubectl create -f nginx-ingress.yaml
