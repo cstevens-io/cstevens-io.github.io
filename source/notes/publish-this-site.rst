@@ -209,7 +209,7 @@ Base encode your kubernetes config file
 
    cat ${HOME}/.kube/config | base64
 
-Create a new environment variable on travis-ci called KUBE_CONFIG and in the VALUE field paste in the base64 encoded config file.  Then update your .travis.yaml file to include the ``install`` section that will download the latest ``kubectl``, the kubernetes client, and echo the value of KUBE_CONFIG into a spot where it can be read by ``kubectl`` 
+Create a new environment variable on travis-ci called KUBE_CONFIG and in the VALUE field paste in the base64 encoded config file.  Then update your .travis.yaml file to include in the ``install`` section commands that will download the latest ``kubectl``, the kubernetes client, and echo the value of KUBE_CONFIG into a spot where it can be read by ``kubectl``.
 
 .. code-block:: text
 
@@ -220,10 +220,35 @@ Create a new environment variable on travis-ci called KUBE_CONFIG and in the VAL
      - mkdir ${HOME}/.kube
      - echo "$KUBE_CONFIG" | base64 --decode > ${HOME}/.kube/config
 
-Then at the bottom of the .travis.yml file, included in the ``after_success`` section, add the lines that will run the kubernetes client and start the deployment of the new pods:
+Then at the bottom of the .travis.yml file, included in the ``after_success`` section, add the lines that will run the kubernetes client and start the deployment of the new pods in your cluster:
 
 .. code-block:: text
 
    - sleep 5
    - kubectl -n docs-cstevens-io rollout restart deployment docs-cstevens-io
    - kubectl -n docs-cstevens-io rollout status deployment docs-cstevens-io
+
+Here's what the end result of the .travis.yml file should look like:
+
+.. code-block:: text
+   :caption: .travis.yml
+
+   install:
+     - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+     - chmod +x ./kubectl
+     - sudo mv ./kubectl /usr/local/bin/kubectl
+     - mkdir ${HOME}/.kube
+     - echo "$KUBE_CONFIG" | base64 --decode > ${HOME}/.kube/config
+
+   services:
+     - docker
+
+   script:
+     - docker build . -t splooge/docs-cstevens-io
+
+   after_success:
+     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+     - docker push splooge/docs-cstevens-io
+     - sleep 5
+     - kubectl -n docs-cstevens-io rollout restart deployment docs-cstevens-io
+     - kubectl -n docs-cstevens-io rollout status deployment docs-cstevens-io

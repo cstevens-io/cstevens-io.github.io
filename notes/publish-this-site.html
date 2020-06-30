@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Publishing this site &mdash; docs.cstevens.io 2020.06.30.22.13 documentation</title>
+  <title>Publishing this site &mdash; docs.cstevens.io 2020.06.30.22.32 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                2020.06.30.22.13
+                2020.06.30.22.32
               </div>
             
           
@@ -347,7 +347,7 @@ deployment &quot;docs-cstevens-io&quot; successfully rolled out
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cat ${HOME}/.kube/config | base64
 </pre></div>
 </div>
-<p>Create a new environment variable on travis-ci called KUBE_CONFIG and in the VALUE field paste in the base64 encoded config file.  Then update your .travis.yaml file to include the <code class="docutils literal notranslate"><span class="pre">install</span></code> section that will download the latest <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>, the kubernetes client, and echo the value of KUBE_CONFIG into a spot where it can be read by <code class="docutils literal notranslate"><span class="pre">kubectl</span></code></p>
+<p>Create a new environment variable on travis-ci called KUBE_CONFIG and in the VALUE field paste in the base64 encoded config file.  Then update your .travis.yaml file to include in the <code class="docutils literal notranslate"><span class="pre">install</span></code> section commands that will download the latest <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>, the kubernetes client, and echo the value of KUBE_CONFIG into a spot where it can be read by <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>install:
   - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
   - chmod +x ./kubectl
@@ -356,11 +356,36 @@ deployment &quot;docs-cstevens-io&quot; successfully rolled out
   - echo &quot;$KUBE_CONFIG&quot; | base64 --decode &gt; ${HOME}/.kube/config
 </pre></div>
 </div>
-<p>Then at the bottom of the .travis.yml file, included in the <code class="docutils literal notranslate"><span class="pre">after_success</span></code> section, add the lines that will run the kubernetes client and start the deployment of the new pods:</p>
+<p>Then at the bottom of the .travis.yml file, included in the <code class="docutils literal notranslate"><span class="pre">after_success</span></code> section, add the lines that will run the kubernetes client and start the deployment of the new pods in your cluster:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>- sleep 5
 - kubectl -n docs-cstevens-io rollout restart deployment docs-cstevens-io
 - kubectl -n docs-cstevens-io rollout status deployment docs-cstevens-io
 </pre></div>
+</div>
+<p>Here’s what the end result of the .travis.yml file should look like:</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">.travis.yml</span><a class="headerlink" href="#id7" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>install:
+  - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+  - chmod +x ./kubectl
+  - sudo mv ./kubectl /usr/local/bin/kubectl
+  - mkdir ${HOME}/.kube
+  - echo &quot;$KUBE_CONFIG&quot; | base64 --decode &gt; ${HOME}/.kube/config
+
+services:
+  - docker
+
+script:
+  - docker build . -t splooge/docs-cstevens-io
+
+after_success:
+  - echo &quot;$DOCKER_PASSWORD&quot; | docker login -u &quot;$DOCKER_ID&quot; --password-stdin
+  - docker push splooge/docs-cstevens-io
+  - sleep 5
+  - kubectl -n docs-cstevens-io rollout restart deployment docs-cstevens-io
+  - kubectl -n docs-cstevens-io rollout status deployment docs-cstevens-io
+</pre></div>
+</div>
 </div>
 </div>
 
