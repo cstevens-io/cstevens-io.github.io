@@ -194,3 +194,36 @@ Watch the replicaset spin up new pods and spin down old ones:
    Waiting for deployment "docs-cstevens-io" rollout to finish: 8 of 10 updated replicas are available...
    Waiting for deployment "docs-cstevens-io" rollout to finish: 9 of 10 updated replicas are available...
    deployment "docs-cstevens-io" successfully rolled out
+
+In case you need to rollback to the previous deployment:
+
+.. code-block:: text
+
+   kubectl -n docs-cstevens-io rollout undo deployment docs-cstevens-io
+
+Getting travis-ci to tell your kubernetes cluster to download the newly published images and roll them out:
+
+Base encode your kubernetes config file
+
+.. code-block:: text
+
+   cat ${HOME}/.kube/config | base64
+
+Create a new environment variable on travis-ci called KUBE_CONFIG and in the VALUE field paste in the base64 encoded config file.  Then update your .travis.yaml file to include the ``install`` section that will download the latest ``kubectl``, the kubernetes client, and echo the value of KUBE_CONFIG into a spot where it can be read by ``kubectl`` 
+
+.. code-block:: text
+
+   install:
+     - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+     - chmod +x ./kubectl
+     - sudo mv ./kubectl /usr/local/bin/kubectl
+     - mkdir ${HOME}/.kube
+     - echo "$KUBE_CONFIG" | base64 --decode > ${HOME}/.kube/config
+
+Then at the bottom of the .travis.yml file, included in the ``after_success`` section, add the lines that will run the kubernetes client and start the deployment of the new pods:
+
+.. code-block:: text
+
+   - sleep 5
+   - kubectl -n docs-cstevens-io rollout restart deployment docs-cstevens-io
+   - kubectl -n docs-cstevens-io rollout status deployment docs-cstevens-io
