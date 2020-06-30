@@ -8,3 +8,4 @@
    tmux
    kube-pods
    kube-deployments
+   publish-this-site

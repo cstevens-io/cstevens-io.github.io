@@ -1,0 +1,358 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Publishing this site &mdash; cstevens-docs 2020.06.29.23.40 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Kubernetes deployments" href="kube-deployments.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> cstevens-docs
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2020.06.29.23.40
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../firstpage.html">First Page!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arch/index.html">Arch Linux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kubernetes/index.html">Kubernetes</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Notes on stuff</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="pacman.html">pacman</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tmux.html">tmux QOL settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kube-pods.html">Kubernetes pods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kube-deployments.html">Kubernetes deployments</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Publishing this site</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cstevens-docs</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">&lt;no title&gt;</a> &raquo;</li>
+        
+      <li>Publishing this site</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/splooge/splooge.github.io/blob/master/source/notes/publish-this-site.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="publishing-this-site">
+<h1>Publishing this site<a class="headerlink" href="#publishing-this-site" title="Permalink to this headline">¶</a></h1>
+<p>This site is made from sphinx-docs.  Here’s how I get these docs published to a website running on kubernetes.</p>
+<p>When you run sphinx to build your restructured text documents into html (out of scope for this doc), it takes the source directory of ./source and publishes to ./build/html.  I went to the build/html folder and initialized a local git repository by running <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">init</span></code>.</p>
+<p>Then we add everything to the local repo by running <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.</span></code>  After that we commit all added files to the local repository with a comment:  <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-a</span> <span class="pre">-m</span> <span class="pre">&quot;initial</span> <span class="pre">commit&quot;</span></code></p>
+<p>Next we create a repo on github.com, and tell our local git repository it has a remote repo to sync to: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span> <span class="pre">origin</span> <span class="pre">master</span> <span class="pre">https://github.com/cstevens-io/cstevens-io.github.io.git</span></code></p>
+<p>Next we’ll create a Dockerfile in the build/html/ directory with the following contents:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Dockerfile</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>FROM nginx:alpine
+WORKDIR &#39;/usr/share/nginx/html&#39;
+COPY . ./
+EXPOSE 80
+</pre></div>
+</div>
+</div>
+<p>This instructs docker to download the latest nginx alpine image.  It will copy the contents of the build/html/ folder to /usr/share/nginx/html inside the nginx image, which is where nginx will read files from the documentroot.  Finally it tells docker to expose port 80.</p>
+<p>Then we will run <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span> <span class="pre">.</span> <span class="pre">-t</span> <span class="pre">splooge/docs-cstevens-io</span></code> which will execute the above and create a local image called <code class="docutils literal notranslate"><span class="pre">splooge/docs-cstevens-io:latest</span></code> where <code class="docutils literal notranslate"><span class="pre">splooge</span></code> is my docker hub username, <code class="docutils literal notranslate"><span class="pre">docs-cstevens-io</span></code> is my image name, and <code class="docutils literal notranslate"><span class="pre">latest</span></code> is a tag or a version number.</p>
+<p>Next we will add a .travis.yml file (note the preceding period) in the build/html/ folder and put the following contents in it:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">.travis.yml</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>services:
+  - docker
+
+script:
+  - docker build . -t splooge/docs-cstevens-io
+
+after_success:
+  - echo &quot;$DOCKER_PASSWORD&quot; | docker login -u &quot;$DOCKER_ID&quot; --password-stdin
+  - docker push splooge/docs-cstevens-io
+</pre></div>
+</div>
+</div>
+<p>This will instruct travis to build the docker image, just like we did locally, and then push the image to docker hub, where we can download it from later.</p>
+<p>You’ll need to log into travis-ci.org and setup your account to read your github repos for your automated builds.  You can log into travis-ci.org with your github account.  There’s a sync button you can press when you first log into travis-ci, it will read your repos on github and populate them in travis-ci.org.  One thing we need to do is define the DOCKER_ID and DOCKER_PASSWORD variables in your repo settings.  This is your docker hub username and password that will be used to push your images to the docker hub registry.</p>
+<p>Next, in your build/html/ folder, check in the new Dockerfile and .travis.yml files, again with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.</span></code>, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-a</span> <span class="pre">-m</span> <span class="pre">&quot;add</span> <span class="pre">Dockerfile</span> <span class="pre">and</span> <span class="pre">.travis.yml&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code>.  travis-ci will notice you have a new .travis.yaml file, follow the instructions, checkout your repo, build the container image and then push it to docker hub.</p>
+<p>Now that the image is on a registry (hub.docker.com) you can continue onto setting up kubernetes, which we will configure to pull the image from the registry.</p>
+<p>TODO: instead of having the same name for all resources (docs-cstevens-io) it might be easier to read if I made them more unique to make a little more sense.</p>
+<p>First I created a new namespace in kubernetes for my docs website.  Namespaces are a way of partitioning your kubernetes cluster for ease of management.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">namespace.yaml</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cat &gt;&gt;namespace.yaml&lt;&lt;EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: docs-cstevens-io
+EOF
+</pre></div>
+</div>
+</div>
+<p>Next we will create a deployment.  A deployment will handle creating and scaling your kubernetes pods.  The first spec (specification) is the deployment spec, the 2nd is the container spec.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">deploy.yaml</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cat &gt;&gt;deploy.yaml&lt;&lt;EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: docs-cstevens-io
+  name: docs-cstevens-io
+  namespace: docs-cstevens-io
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: docs-cstevens-io
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: docs-cstevens-io
+    spec:
+      containers:
+        - image: splooge/docs-cstevens-io
+          name: docs-cstevens-io
+          imagePullPolicy: Always
+EOF
+</pre></div>
+</div>
+</div>
+<p>Now we’ll create a service.  A service gives us an entrypoint to our deployment and will handle load balancing amongst those pods</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">service.yaml</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cat &gt;&gt;service.yaml&lt;&lt;EOF
+apiVersion: 1
+kind: Service
+metadata:
+  labels:
+    app: docs-cstevens-io
+  name: docs-cstevens-io
+  namespace: docs-cstevens-io
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: docs-cstevens-io
+EOF
+</pre></div>
+</div>
+</div>
+<p>Finally we’ll create an ingressroute, which is Traefik’s version of a kubernetes ingress, but not really within the scope of this document.  In this case, this ingressroute will match for the host headers “docs.cstevens.io” and forward traffic to the docs-cstevens-io service (which then forwards to the docs-cstevens-io deploy, which then forwards to the docs-cstevens-io pods)</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">ingressroute.yaml</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cat &gt;&gt;ingressroute.yaml&lt;&lt;EOF
+apiVesion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: docs-cstevens-io
+  namespace: docs-cstevens-io
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`docs.cstevens.io`)
+      kind: Rule
+      services:
+        - name: docs-cstevens-io
+          port: 80
+EOF
+</pre></div>
+</div>
+</div>
+<p>We can then apply the configs by running</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>kubectl create -f namespace.yaml -f deploy.yaml -f service.yaml -f ingressroute.yaml
+</pre></div>
+</div>
+<p>You can view the resources by running</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>kubectl -n docs-cstevens-io get ingressroute,service,deploy,pod
+</pre></div>
+</div>
+<p>You’ll notice that kubernetes has downloaded the custom nginx image we created (splooge/docs-cstevens-io) from docker hub that has our documentation already installed on it.</p>
+<p>You can scale up/down the number of pods behind the service, then monitor them by running:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>kubectl -n docs-cstevens-io scale deploy docs-cstevens-io --replicas 5
+kubectl -n docs-cstevens-io get all
+kubectl -n docs-cstevens-io scale deploy docs-cstevens-io --replicas 2
+kubectl -n docs-cstevens-io get all
+</pre></div>
+</div>
+<p>You should now also be able to see the relevant information (routers, services) in the traefik dashboard.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="kube-deployments.html" class="btn btn-neutral float-left" title="Kubernetes deployments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Chris Stevens
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
