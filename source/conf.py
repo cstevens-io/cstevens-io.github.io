@@ -21,7 +21,7 @@ import openstackdocstheme
 
 # -- Project information -----------------------------------------------------
 
-project = 'cstevens-docs'
+project = 'docs.cstevens.io'
 copyright = '2020, Chris Stevens'
 author = 'Chris Stevens'
 

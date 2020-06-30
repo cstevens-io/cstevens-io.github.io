@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Publishing this site &mdash; cstevens-docs 2020.06.29.23.40 documentation</title>
+  <title>Publishing this site &mdash; docs.cstevens.io 2020.06.30.01.41 documentation</title>
   
 
   
@@ -50,7 +50,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> cstevens-docs
+            <a href="../index.html" class="icon icon-home"> docs.cstevens.io
           
 
           
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                2020.06.29.23.40
+                2020.06.30.01.41
               </div>
             
           
@@ -111,7 +111,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">cstevens-docs</a>
+          <a href="../index.html">docs.cstevens.io</a>
         
       </nav>
 
@@ -206,20 +206,17 @@ after_success:
 <p>First I created a new namespace in kubernetes for my docs website.  Namespaces are a way of partitioning your kubernetes cluster for ease of management.</p>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">namespace.yaml</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cat &gt;&gt;namespace.yaml&lt;&lt;EOF
-apiVersion: v1
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>apiVersion: v1
 kind: Namespace
 metadata:
   name: docs-cstevens-io
-EOF
 </pre></div>
 </div>
 </div>
 <p>Next we will create a deployment.  A deployment will handle creating and scaling your kubernetes pods.  The first spec (specification) is the deployment spec, the 2nd is the container spec.</p>
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text">deploy.yaml</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cat &gt;&gt;deploy.yaml&lt;&lt;EOF
-apiVersion: apps/v1
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -241,15 +238,13 @@ spec:
         - image: splooge/docs-cstevens-io
           name: docs-cstevens-io
           imagePullPolicy: Always
-EOF
 </pre></div>
 </div>
 </div>
 <p>Now we’ll create a service.  A service gives us an entrypoint to our deployment and will handle load balancing amongst those pods</p>
 <div class="literal-block-wrapper docutils container" id="id5">
 <div class="code-block-caption"><span class="caption-text">service.yaml</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cat &gt;&gt;service.yaml&lt;&lt;EOF
-apiVersion: 1
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>apiVersion: 1
 kind: Service
 metadata:
   labels:
@@ -263,15 +258,13 @@ spec:
     targetPort: 80
   selector:
     app: docs-cstevens-io
-EOF
 </pre></div>
 </div>
 </div>
 <p>Finally we’ll create an ingressroute, which is Traefik’s version of a kubernetes ingress, but not really within the scope of this document.  In this case, this ingressroute will match for the host headers “docs.cstevens.io” and forward traffic to the docs-cstevens-io service (which then forwards to the docs-cstevens-io deploy, which then forwards to the docs-cstevens-io pods)</p>
 <div class="literal-block-wrapper docutils container" id="id6">
 <div class="code-block-caption"><span class="caption-text">ingressroute.yaml</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cat &gt;&gt;ingressroute.yaml&lt;&lt;EOF
-apiVesion: traefik.containo.us/v1alpha1
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>apiVesion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: docs-cstevens-io
@@ -285,7 +278,6 @@ spec:
       services:
         - name: docs-cstevens-io
           port: 80
-EOF
 </pre></div>
 </div>
 </div>
@@ -294,7 +286,7 @@ EOF
 </pre></div>
 </div>
 <p>You can view the resources by running</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>kubectl -n docs-cstevens-io get ingressroute,service,deploy,pod
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>kubectl -n docs-cstevens-io get ingressroute,service,deploy,rs,pod
 </pre></div>
 </div>
 <p>You’ll notice that kubernetes has downloaded the custom nginx image we created (splooge/docs-cstevens-io) from docker hub that has our documentation already installed on it.</p>
@@ -305,7 +297,15 @@ kubectl -n docs-cstevens-io scale deploy docs-cstevens-io --replicas 2
 kubectl -n docs-cstevens-io get all
 </pre></div>
 </div>
-<p>You should now also be able to see the relevant information (routers, services) in the traefik dashboard.</p>
+<p>The site <a class="reference external" href="http://docs.cstevens.io">http://docs.cstevens.io</a> should be available now.  You should now also be able to see the relevant information (routers, services) in the traefik dashboard.</p>
+<p>When you next update your html, do a checkin, and let travis-ci build and publish your new image to docker hub, you can schedule kubernetes to download and run the latest image by running the following:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>kubectl -n docs-cstevens-io rollout restart deployment
+</pre></div>
+</div>
+<p>To watch the rollout in action, watch the replicaset spin down old pods and spin up new ones:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>kubectl -n docs-cstevens-io get replicaset -w
+</pre></div>
+</div>
 </div>
 
 

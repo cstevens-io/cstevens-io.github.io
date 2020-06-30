@@ -53,19 +53,16 @@ First I created a new namespace in kubernetes for my docs website.  Namespaces a
 .. code-block:: text
    :caption: namespace.yaml
 
-   cat >>namespace.yaml<<EOF
    apiVersion: v1
    kind: Namespace
    metadata:
      name: docs-cstevens-io
-   EOF
 
 Next we will create a deployment.  A deployment will handle creating and scaling your kubernetes pods.  The first spec (specification) is the deployment spec, the 2nd is the container spec.
 
 .. code-block:: text
    :caption: deploy.yaml
 
-   cat >>deploy.yaml<<EOF
    apiVersion: apps/v1
    kind: Deployment
    metadata:
@@ -88,14 +85,12 @@ Next we will create a deployment.  A deployment will handle creating and scaling
            - image: splooge/docs-cstevens-io
              name: docs-cstevens-io
              imagePullPolicy: Always
-   EOF
 
 Now we'll create a service.  A service gives us an entrypoint to our deployment and will handle load balancing amongst those pods
 
 .. code-block:: text
    :caption: service.yaml
 
-   cat >>service.yaml<<EOF
    apiVersion: 1
    kind: Service
    metadata:
@@ -110,14 +105,12 @@ Now we'll create a service.  A service gives us an entrypoint to our deployment 
        targetPort: 80
      selector:
        app: docs-cstevens-io
-   EOF
 
 Finally we'll create an ingressroute, which is Traefik's version of a kubernetes ingress, but not really within the scope of this document.  In this case, this ingressroute will match for the host headers "docs.cstevens.io" and forward traffic to the docs-cstevens-io service (which then forwards to the docs-cstevens-io deploy, which then forwards to the docs-cstevens-io pods)
 
 .. code-block:: text
    :caption: ingressroute.yaml
    
-   cat >>ingressroute.yaml<<EOF
    apiVesion: traefik.containo.us/v1alpha1
    kind: IngressRoute
    metadata:
@@ -132,7 +125,6 @@ Finally we'll create an ingressroute, which is Traefik's version of a kubernetes
          services:
            - name: docs-cstevens-io
              port: 80
-   EOF
 
 We can then apply the configs by running
 
@@ -144,7 +136,7 @@ You can view the resources by running
 
 .. code-block:: text
 
-   kubectl -n docs-cstevens-io get ingressroute,service,deploy,pod
+   kubectl -n docs-cstevens-io get ingressroute,service,deploy,rs,pod
 
 You'll notice that kubernetes has downloaded the custom nginx image we created (splooge/docs-cstevens-io) from docker hub that has our documentation already installed on it.
 
@@ -157,4 +149,17 @@ You can scale up/down the number of pods behind the service, then monitor them b
    kubectl -n docs-cstevens-io scale deploy docs-cstevens-io --replicas 2
    kubectl -n docs-cstevens-io get all
 
-You should now also be able to see the relevant information (routers, services) in the traefik dashboard.
+The site http://docs.cstevens.io should be available now.  You should now also be able to see the relevant information (routers, services) in the traefik dashboard.
+
+When you next update your html, do a checkin, and let travis-ci build and publish your new image to docker hub, you can schedule kubernetes to download and run the latest image by running the following:
+
+.. code-block:: text
+
+   kubectl -n docs-cstevens-io rollout restart deployment
+
+To watch the rollout in action, watch the replicaset spin down old pods and spin up new ones:
+
+.. code-block:: text
+
+   kubectl -n docs-cstevens-io get replicaset -w
+
