@@ -3,9 +3,7 @@ install:
   - chmod +x ./kubectl
   - sudo mv ./kubectl /usr/local/bin/kubectl
   - mkdir ${HOME}/.kube
-  - echo "$KUBE_CONFIG"
   - echo "$KUBE_CONFIG" | base64 --decode > ${HOME}/.kube/config
-  - cat ${HOME}/.kube/config
 
 services:
   - docker
