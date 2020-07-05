@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Publishing this site &mdash; docs.cstevens.io 2020.06.30.22.32 documentation</title>
+  <title>Publishing this site &mdash; docs.cstevens.io 2020.07.05.21.01 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                2020.06.30.22.32
+                2020.07.05.21.01
               </div>
             
           
@@ -349,9 +349,9 @@ deployment &quot;docs-cstevens-io&quot; successfully rolled out
 </div>
 <p>Create a new environment variable on travis-ci called KUBE_CONFIG and in the VALUE field paste in the base64 encoded config file.  Then update your .travis.yaml file to include in the <code class="docutils literal notranslate"><span class="pre">install</span></code> section commands that will download the latest <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>, the kubernetes client, and echo the value of KUBE_CONFIG into a spot where it can be read by <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>install:
-  - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-  - chmod +x ./kubectl
-  - sudo mv ./kubectl /usr/local/bin/kubectl
+  - RELEASE=&quot;$(curl -sSL https://dl.k8s.io/release/stable.txt)&quot;
+  - curl -L -o https://storage.googleapis.com/kubernetes-release/release/${RELEASE}/bin/linux/amd64/kubectl /usr/local/bin/kubectl
+  - chmod +x /usr/local/bin/kubectl
   - mkdir ${HOME}/.kube
   - echo &quot;$KUBE_CONFIG&quot; | base64 --decode &gt; ${HOME}/.kube/config
 </pre></div>
@@ -366,9 +366,9 @@ deployment &quot;docs-cstevens-io&quot; successfully rolled out
 <div class="literal-block-wrapper docutils container" id="id7">
 <div class="code-block-caption"><span class="caption-text">.travis.yml</span><a class="headerlink" href="#id7" title="Permalink to this code">¶</a></div>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>install:
-  - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-  - chmod +x ./kubectl
-  - sudo mv ./kubectl /usr/local/bin/kubectl
+  - RELEASE=&quot;$(curl -sSL https://dl.k8s.io/release/stable.txt)&quot;
+  - curl -L -o https://storage.googleapis.com/kubernetes-release/release/${RELEASE}/bin/linux/amd64/kubectl /usr/local/bin/kubectl
+  - chmod +x /usr/local/bin/kubectl
   - mkdir ${HOME}/.kube
   - echo &quot;$KUBE_CONFIG&quot; | base64 --decode &gt; ${HOME}/.kube/config
 
@@ -384,6 +384,43 @@ after_success:
   - sleep 5
   - kubectl -n docs-cstevens-io rollout restart deployment docs-cstevens-io
   - kubectl -n docs-cstevens-io rollout status deployment docs-cstevens-io
+</pre></div>
+</div>
+</div>
+<p>Here’s a shell script to create a kubeconfig:</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">k8s-create-user.sh</span><a class="headerlink" href="#id8" title="Permalink to this code">¶</a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>K3S_PATH=/var/lib/rancher/k3s
+DAYS=3650
+
+CLUSTER_NAME=&quot;default&quot;
+CLUSTER_NAMESPACE=&quot;docs-cstevens-io&quot;
+USER=&quot;travis-ci&quot;
+CLUSTER_URL=&quot;https://arch.pwned.com:6443&quot;
+CA_PATH=&quot;${K3S_PATH}/server/tls&quot;
+WORKDIR=&quot;gen&quot;
+KUBEDIR=&quot;kube&quot;
+KEYSDIR=&quot;keys&quot;
+KUBECONFIG=&quot;${KUBEDIR}/${USER}.kubeconfig&quot;
+CONTEXT=&quot;${USER}@${CLUSTER_NAME}&quot;
+
+if [[ ! -d &quot;${K3S_PATH}/${WORKDIR}/${KUBEDIR}&quot; ]] || [[ ! -d &quot;${K3S_PATH}/${WORKDIR}/${KEYSDIR}&quot; ]]
+then
+    mkdir -p ${K3S_PATH}/${WORKDIR}/{${KUBEDIR},${KEYSDIR}}
+fi
+cd &quot;${K3S_PATH}/${WORKDIR}&quot;
+
+# generate and sign keys
+openssl ecparam -name prime256v1 -genkey -noout -out ${KEYSDIR}/${USER}.key
+openssl req -new -key ${KEYSDIR}/${USER}.key -out ${KEYSDIR}/${USER}.csr -subj &quot;/CN=${USER}@${CLUSTER_NAME}/O=key-gen&quot;
+openssl x509 -req -in ${KEYSDIR}/${USER}.csr -CA ${CA_PATH}/client-ca.crt -CAkey $CA_PATH/client-ca.key -CAcreateserial -out ${KEYSDIR}/${USER}.crt -days ${DAYS}
+
+# generate kubeconfig
+kubectl --kubeconfig=${KUBECONFIG} config set-cluster ${CLUSTER_NAME} --embed-certs=true --server=${CLUSTER_URL} --certificate-authority=${CA_PATH}/server-ca.crt
+kubectl --kubeconfig=${KUBECONFIG} config set-credentials ${USER} --embed-certs=true --client-certificate=${KEYSDIR}/${USER}.crt  --client-key=${KEYSDIR}/${USER}.key
+kubectl --kubeconfig=${KUBECONFIG} config set-context ${CONTEXT} --cluster=${CLUSTER_NAME} --namespace=${CLUSTER_NAMESPACE} --user=${USER}
+kubectl --kubeconfig=${KUBECONFIG} config set current-context ${CONTEXT}
+kubectl --kubeconfig=${KUBECONFIG} --context=${CONTEXT} get pods
 </pre></div>
 </div>
 </div>
